@@ -40,6 +40,20 @@ app.post('/contactos', (req, res) => {
     });
 });
 
+// Obtener contacto por ID
+app.get('/contactos/:id', (req, res) => {
+  const id = req.params.id;
+  db.get('SELECT * FROM contactos WHERE id = ?', [id], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'Contacto no encontrado' });
+    }
+    res.json(row);
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`API corriendo en puerto ${PORT}`);
